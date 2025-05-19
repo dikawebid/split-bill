@@ -13,7 +13,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
     async function fetchData() {
       const qris = new QRIS({
         sourceType: SourceType.CODE,
-        sourceValue: process.env.REACT_APP_QRIS_CODE,
+        sourceValue: import.meta.env.VITE_QRIS_CODE,
         amount: amount, 
       });
     
