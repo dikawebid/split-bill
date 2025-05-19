@@ -36,14 +36,18 @@ const BillSplitter: React.FC = () => {
             <PersonForm onAdd={addPerson} />
             <PersonList className="mt-4" />
           </div>
-
-          <DiscountSection />
-          <ShippingSection />
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Summary</h2>
-          <Summary />
+          <div className="space-y-4">
+            <DiscountSection />
+            <ShippingSection />
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-800 my-4">Summary</h2>
+            <Summary />
+          </div>
         </div>
       </div>
     </div>

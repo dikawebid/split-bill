@@ -111,6 +111,8 @@ const Summary: React.FC = () => {
           amount={selectedPerson.summary.total}
           personName={selectedPerson.name}
           items={selectedPerson.summary.items}
+          discount={selectedPerson.summary.discount}
+          shippingCost={selectedPerson.summary.shipping}
         />
       )}
     </div>

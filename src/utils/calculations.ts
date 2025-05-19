@@ -57,10 +57,15 @@ export const calculateBill = (
   // Calculate shipping per person
   const shippingPerPerson = shipping.amount / people.length;
 
+  // New: Calculate discount per person
+  const discountPerPerson = totalDiscount / people.length;
+
   // Apply discount and shipping to each person proportionally
   Object.values(perPersonBreakdown).forEach(summary => {
     const discountRatio = summary.subtotal / subtotal;
-    summary.discount = totalDiscount * discountRatio;
+    // Old: Calculate discount per item
+    // summary.discount = totalDiscount * discountRatio;
+    summary.discount = discountPerPerson;
     summary.shipping = shippingPerPerson;
     summary.total = summary.subtotal - summary.discount + summary.shipping;
   });

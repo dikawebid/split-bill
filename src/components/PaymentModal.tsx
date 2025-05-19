@@ -4,7 +4,7 @@ import { PaymentModalProps } from '../types';
 import { formatCurrency } from '../utils/calculations';
 import { QRIS, SourceType } from 'modify-qris';
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, personName, items }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, personName, items, discount = 0, shippingCost = 0 }) => {
   if (!isOpen) return null;
 
   const [qrisBase64, setQrisBase64] = useState(null);
@@ -13,9 +13,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
     async function fetchData() {
       let sourceValue = '00020101021126740025ID.CO.BANKNEOCOMMERCE.WWW011893600490594025501202120005900565650303UMI51550025ID.CO.BANKNEOCOMMERCE.WWW0215ID10232469816180303UMI5204541153033605405200005502015802ID5915DHKA SPLIT BILL6013BANDUNG BARAT6105403916233052230019049785705912934400703T0163045FEB';
 
-      if (import.meta.env.VITE_QRIS_CODE) {
+      if (import.meta?.env?.VITE_QRIS_CODE) {
         sourceValue = import.meta.env.VITE_QRIS_CODE;
-      } else if (process.env.REACT_APP_QRIS_CODE) {
+      } else if (process?.env?.REACT_APP_QRIS_CODE) {
         sourceValue = process.env.REACT_APP_QRIS_CODE;
       }
 
@@ -27,7 +27,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
     
       const qrBase64 = await qris.generateQRBase64();
       setQrisBase64(qrBase64);
-      console.log('qrBase64', qrBase64);
     }
     fetchData();
   }, [isOpen]);
@@ -50,7 +49,22 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
                   <span>{formatCurrency(item.total)}</span>
                 </div>
               ))}
+
+              {shippingCost != 0 && <>
+                <div key={items.length+1} className="flex justify-between text-sm">
+                  <span>Shipping Cost</span>
+                  <span>{formatCurrency(shippingCost)}</span>
+                </div>
+              </>}
             </div>
+
+            {discount != 0 && <div className="mt-4">
+              <h4 className="font-medium text-gray-700 mb-2">Discount:</h4>
+              <div className="flex justify-between text-sm">
+                <span>Voucher</span>
+                <span className="text-emerald-600">-{formatCurrency(discount)}</span>
+              </div>
+            </div>}
           </div>
           
           <div className="bg-gray-100 p-8 rounded-lg mb-6 flex items-center justify-center">
