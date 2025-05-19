@@ -11,9 +11,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
 
   useEffect(() => {
     async function fetchData() {
+      let sourceValue = '00020101021126740025ID.CO.BANKNEOCOMMERCE.WWW011893600490594025501202120005900565650303UMI51550025ID.CO.BANKNEOCOMMERCE.WWW0215ID10232469816180303UMI5204541153033605405200005502015802ID5915DHKA SPLIT BILL6013BANDUNG BARAT6105403916233052230019049785705912934400703T0163045FEB';
+
+      if (import.meta.env.VITE_QRIS_CODE) {
+        sourceValue = import.meta.env.VITE_QRIS_CODE;
+      } else if (process.env.REACT_APP_QRIS_CODE) {
+        sourceValue = process.env.REACT_APP_QRIS_CODE;
+      }
+
       const qris = new QRIS({
         sourceType: SourceType.CODE,
-        sourceValue: import.meta.env.VITE_QRIS_CODE,
+        sourceValue: sourceValue,
         amount: amount, 
       });
     
