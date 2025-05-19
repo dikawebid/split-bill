@@ -29,15 +29,20 @@ const Summary: React.FC = () => {
             <span className="text-gray-600">Subtotal:</span>
             <span className="font-medium">{formatCurrency(summary.subtotal)}</span>
           </div>
-          
-          <div className="flex justify-between">
-            <span className="text-gray-600">Discount:</span>
-            <span className="font-medium text-emerald-600">-{formatCurrency(summary.discount)}</span>
-          </div>
 
           <div className="flex justify-between">
             <span className="text-gray-600">Shipping:</span>
             <span className="font-medium">{formatCurrency(summary.shipping)}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-gray-600">Other Fee:</span>
+            <span className="font-medium">{formatCurrency(summary.otherFee)}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-gray-600">Discount:</span>
+            <span className="font-medium text-emerald-600">-{formatCurrency(summary.discount)}</span>
           </div>
           
           <div className="flex justify-between pt-2">
@@ -113,6 +118,7 @@ const Summary: React.FC = () => {
           items={selectedPerson.summary.items}
           discount={selectedPerson.summary.discount}
           shippingCost={selectedPerson.summary.shipping}
+          otherFee={selectedPerson.summary.otherFee}
         />
       )}
     </div>

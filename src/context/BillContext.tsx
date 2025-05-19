@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { BillItem, Person, Discount, CalculationSummary, ShippingCost, ItemAssignment } from '../types';
+import { BillItem, Person, Discount, CalculationSummary, ShippingCost, ItemAssignment, OtherFeeCost } from '../types';
 import { calculateBill } from '../utils/calculations';
 
 interface BillContextType {
@@ -8,12 +8,14 @@ interface BillContextType {
   assignments: ItemAssignment[];
   discount: Discount;
   shipping: ShippingCost;
+  otherFee: OtherFeeCost;
   addItem: (name: string, price: number) => void;
   removeItem: (id: string) => void;
   addPerson: (name: string) => void;
   removePerson: (id: string) => void;
   updateDiscount: (type: 'percentage' | 'fixed', value: number) => void;
   updateShipping: (amount: number) => void;
+  updateOtherFee: (amount: number) => void;
   togglePaid: (id: string) => void;
   assignItem: (itemId: string, personId: string, quantity: number) => void;
   removeAssignment: (itemId: string, personId: string) => void;
@@ -30,6 +32,7 @@ interface StorageData {
   assignments: ItemAssignment[];
   discount: Discount;
   shipping: ShippingCost;
+  otherFee: OtherFeeCost;
 }
 
 const loadFromStorage = (): StorageData | null => {
@@ -59,10 +62,11 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [assignments, setAssignments] = useState<ItemAssignment[]>(storedData?.assignments || []);
   const [discount, setDiscount] = useState<Discount>(storedData?.discount || { type: 'percentage', value: 0 });
   const [shipping, setShipping] = useState<ShippingCost>(storedData?.shipping || { amount: 0 });
+  const [otherFee, setOtherFee] = useState<OtherFeeCost>(storedData?.otherFee || { amount: 0 });
 
   useEffect(() => {
-    saveToStorage({ items, people, assignments, discount, shipping });
-  }, [items, people, assignments, discount, shipping]);
+    saveToStorage({ items, people, assignments, discount, shipping, otherFee });
+  }, [items, people, assignments, discount, shipping, otherFee]);
 
   const addItem = (name: string, price: number) => {
     const newItem: BillItem = {
@@ -132,8 +136,12 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setShipping({ amount });
   };
 
+  const updateOtherFee = (amount: number) => {
+    setOtherFee({ amount });
+  };
+
   const getSummary = (): CalculationSummary => {
-    return calculateBill(items, assignments, people, discount, shipping);
+    return calculateBill(items, assignments, people, discount, shipping, otherFee);
   };
 
   const reset = () => {
@@ -142,6 +150,7 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAssignments([]);
     setDiscount({ type: 'percentage', value: 0 });
     setShipping({ amount: 0 });
+    setOtherFee({ amount: 0 });
     localStorage.removeItem(STORAGE_KEY);
   };
 
@@ -151,12 +160,14 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     assignments,
     discount,
     shipping,
+    otherFee,
     addItem,
     removeItem,
     addPerson,
     removePerson,
     updateDiscount,
     updateShipping,
+    updateOtherFee,
     togglePaid,
     assignItem,
     removeAssignment,

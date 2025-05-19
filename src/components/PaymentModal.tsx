@@ -4,7 +4,7 @@ import { PaymentModalProps } from '../types';
 import { formatCurrency } from '../utils/calculations';
 import { QRIS, SourceType } from 'modify-qris';
 
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, personName, items, discount = 0, shippingCost = 0 }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, personName, items, discount = 0, shippingCost = 0, otherFee = 0 }) => {
   if (!isOpen) return null;
 
   const [qrisBase64, setQrisBase64] = useState(null);
@@ -54,6 +54,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, pe
                 <div key={items.length+1} className="flex justify-between text-sm">
                   <span>Shipping Cost</span>
                   <span>{formatCurrency(shippingCost)}</span>
+                </div>
+              </>}
+
+              {otherFee != 0 && <>
+                <div key={items.length+2} className="flex justify-between text-sm">
+                  <span>Other Fee</span>
+                  <span>{formatCurrency(otherFee)}</span>
                 </div>
               </>}
             </div>

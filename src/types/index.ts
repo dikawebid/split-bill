@@ -25,6 +25,10 @@ export interface ShippingCost {
   amount: number;
 }
 
+export interface OtherFeeCost {
+  amount: number;
+}
+
 export interface PersonSummary {
   items: Array<{
     name: string;

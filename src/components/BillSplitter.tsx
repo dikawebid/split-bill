@@ -5,6 +5,7 @@ import { BillItemForm, BillItemList } from './BillItem';
 import { PersonForm, PersonList } from './PersonList';
 import DiscountSection from './DiscountSection';
 import ShippingSection from './ShippingSection';
+import OtherFeeSection from './OtherFeeSection';
 import Summary from './Summary';
 
 const BillSplitter: React.FC = () => {
@@ -42,6 +43,7 @@ const BillSplitter: React.FC = () => {
           <div className="space-y-4">
             <DiscountSection />
             <ShippingSection />
+            <OtherFeeSection />
           </div>
 
           <div className="space-y-4">

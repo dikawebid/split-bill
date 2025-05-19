@@ -1,11 +1,12 @@
-import { BillItem, Discount, CalculationSummary, ShippingCost, ItemAssignment, Person } from '../types';
+import { BillItem, Discount, CalculationSummary, ShippingCost, ItemAssignment, Person, OtherFeeCost } from '../types';
 
 export const calculateBill = (
   items: BillItem[],
   assignments: ItemAssignment[],
   people: Person[],
   discount: Discount,
-  shipping: ShippingCost
+  shipping: ShippingCost,
+  otherFee: OtherFeeCost,
 ): CalculationSummary => {
   const itemMap = new Map(items.map(item => [item.id, item]));
   const perPersonBreakdown: CalculationSummary['perPersonBreakdown'] = {};
@@ -17,9 +18,12 @@ export const calculateBill = (
       subtotal: 0,
       discount: 0,
       shipping: 0,
+      otherFee: 0,
       total: 0
     };
   });
+  
+  const otherFeeAmount = otherFee?.amount ?? 0;
 
   // Calculate individual items and subtotals
   assignments.forEach(assignment => {
@@ -57,6 +61,9 @@ export const calculateBill = (
   // Calculate shipping per person
   const shippingPerPerson = shipping.amount / people.length;
 
+  // Calculate other fee per person
+  const otherFeePerPerson = otherFeeAmount / people.length;
+
   // New: Calculate discount per person
   const discountPerPerson = totalDiscount / people.length;
 
@@ -67,14 +74,16 @@ export const calculateBill = (
     // summary.discount = totalDiscount * discountRatio;
     summary.discount = discountPerPerson;
     summary.shipping = shippingPerPerson;
-    summary.total = summary.subtotal - summary.discount + summary.shipping;
+    summary.otherFee = otherFeePerPerson;
+    summary.total = summary.subtotal - summary.discount + summary.shipping + summary.otherFee;
   });
 
   return {
     subtotal,
     discount: totalDiscount,
     shipping: shipping.amount,
-    total: subtotal - totalDiscount + shipping.amount,
+    otherFee: otherFeeAmount,
+    total: subtotal - totalDiscount + shipping.amount + otherFeeAmount,
     perPersonBreakdown
   };
 };
