@@ -6,12 +6,12 @@ const DiscountSection: React.FC = () => {
   const { discount, updateDiscount } = useBillContext();
 
   const handleTypeChange = (type: 'percentage' | 'fixed') => {
-    updateDiscount(type, discount.value);
+    updateDiscount(type, discount.value, discount.forType);
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value) || 0;
-    updateDiscount(discount.type, value);
+    updateDiscount(discount.type, value, discount.forType);
   };
 
   return (
@@ -53,8 +53,8 @@ const DiscountSection: React.FC = () => {
           <div className="relative">
             {discount.type === 'fixed' && (
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                $
-              </span>
+              Rp
+            </span>
             )}
             <input
               type="number"
@@ -63,7 +63,7 @@ const DiscountSection: React.FC = () => {
               value={discount.value || ''}
               onChange={handleValueChange}
               className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                discount.type === 'fixed' ? 'pl-7' : ''
+                discount.type === 'fixed' ? 'pl-10' : 'pr-10'
               }`}
             />
             {discount.type === 'percentage' && (

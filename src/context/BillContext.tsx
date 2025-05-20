@@ -13,7 +13,7 @@ interface BillContextType {
   removeItem: (id: string) => void;
   addPerson: (name: string) => void;
   removePerson: (id: string) => void;
-  updateDiscount: (type: 'percentage' | 'fixed', value: number) => void;
+  updateDiscount: (type: 'percentage' | 'fixed', value: number, forType: 'person' | 'item') => void;
   updateShipping: (amount: number) => void;
   updateOtherFee: (amount: number) => void;
   togglePaid: (id: string) => void;
@@ -60,7 +60,7 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [items, setItems] = useState<BillItem[]>(storedData?.items || []);
   const [people, setPeople] = useState<Person[]>(storedData?.people || []);
   const [assignments, setAssignments] = useState<ItemAssignment[]>(storedData?.assignments || []);
-  const [discount, setDiscount] = useState<Discount>(storedData?.discount || { type: 'percentage', value: 0 });
+  const [discount, setDiscount] = useState<Discount>(storedData?.discount || { type: 'percentage', value: 0, forType: 'person' });
   const [shipping, setShipping] = useState<ShippingCost>(storedData?.shipping || { amount: 0 });
   const [otherFee, setOtherFee] = useState<OtherFeeCost>(storedData?.otherFee || { amount: 0 });
 
@@ -128,8 +128,8 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     ));
   };
 
-  const updateDiscount = (type: 'percentage' | 'fixed', value: number) => {
-    setDiscount({ type, value });
+  const updateDiscount = (type: 'percentage' | 'fixed', value: number, forType: 'person' | 'item') => {
+    setDiscount({ type, value, forType });
   };
 
   const updateShipping = (amount: number) => {
@@ -148,7 +148,7 @@ export const BillProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setItems([]);
     setPeople([]);
     setAssignments([]);
-    setDiscount({ type: 'percentage', value: 0 });
+    setDiscount({ type: 'percentage', value: 0, forType: 'person' });
     setShipping({ amount: 0 });
     setOtherFee({ amount: 0 });
     localStorage.removeItem(STORAGE_KEY);

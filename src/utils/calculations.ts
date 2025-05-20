@@ -70,9 +70,13 @@ export const calculateBill = (
   // Apply discount and shipping to each person proportionally
   Object.values(perPersonBreakdown).forEach(summary => {
     const discountRatio = summary.subtotal / subtotal;
-    // Old: Calculate discount per item
-    // summary.discount = totalDiscount * discountRatio;
-    summary.discount = discountPerPerson;
+
+    if (discount.forType === 'item') {
+      // Old: Calculate discount per item
+      summary.discount = totalDiscount * discountRatio;
+    } else {
+      summary.discount = discountPerPerson;
+    }
     summary.shipping = shippingPerPerson;
     summary.otherFee = otherFeePerPerson;
     summary.total = summary.subtotal - summary.discount + summary.shipping + summary.otherFee;

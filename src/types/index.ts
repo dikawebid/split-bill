@@ -19,6 +19,7 @@ export interface Person {
 export interface Discount {
   type: 'percentage' | 'fixed';
   value: number;
+  forType: 'person' | 'item';
 }
 
 export interface ShippingCost {

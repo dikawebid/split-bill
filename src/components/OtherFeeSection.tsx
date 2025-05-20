@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck } from 'lucide-react';
+import { HandCoins } from 'lucide-react';
 import { useBillContext } from '../context/BillContext';
 import { formatCurrency } from '../utils/calculations';
 
@@ -32,7 +32,7 @@ const OtherFeeSection: React.FC = () => {
           </div>
         </div>
         
-        <Truck size={20} className="text-gray-500" />
+        <HandCoins size={20} className="text-gray-500" />
       </div>
     </div>
   );
